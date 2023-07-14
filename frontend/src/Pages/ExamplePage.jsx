@@ -227,6 +227,7 @@ const ExamplePage = () => {
         <thead>
           <tr>
             <th>Select</th>
+            <th>ID</th>
             <th>Name</th>
             <th>Phone Number</th>
             <th>Email</th>
@@ -235,7 +236,7 @@ const ExamplePage = () => {
           </tr>
         </thead>
         <tbody>
-          {tableData.map((data) => (
+          {tableData.map((data,index) => (
             <tr key={data._id}>
               <td>
                 <Form.Check
@@ -244,7 +245,7 @@ const ExamplePage = () => {
                   onChange={(e) => handleCheckboxChange(e, data._id)}
                 />
               </td> 
-              {/* <td>{data._id}</td> */}
+              <td>{index+1}</td>
               <td>{data.name}</td>
               <td>{data.phone}</td>
               <td>{data.email}</td>
