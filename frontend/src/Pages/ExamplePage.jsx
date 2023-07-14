@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Form, Button, Modal } from "react-bootstrap";
 import axios from "axios";
+// import { toast } from "react-toastify";
 
 const ExamplePage = () => {
   const [formData, setFormData] = useState({
@@ -9,12 +10,13 @@ const ExamplePage = () => {
     email: "",
     hobbies: "",
   });
-  const [tableData, setTableData] = useState([]); 
+  const [tableData, setTableData] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [showAdd, setShowAdd] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
   const [emailAddress, setEmailAddress] = useState("info@redpositive.in");
-  const [show,setShow] = useState(false);
+  const [show, setShow] = useState(false);
 
   const [updatedUserData, setUpdatedUserData] = useState({
     name: "",
@@ -30,8 +32,13 @@ const ExamplePage = () => {
       email: formData.email,
       hobbies: formData.hobbies,
     };
-    if(formData.name===""||formData.email===""||formData.phone===""||formData.hobbies===""){
-      return alert("No Fields could be left blank")
+    if (
+      formData.name === "" ||
+      formData.email === "" ||
+      formData.phone === "" ||
+      formData.hobbies === ""
+    ) {
+      return alert("No Fields could be left blank");
     }
     setTableData([...tableData, newEntry]);
     setFormData({ name: "", phone: "", email: "", hobbies: "" });
@@ -61,7 +68,9 @@ const ExamplePage = () => {
 
   const fetchAllUsers = async () => {
     try {
-      const response = await fetch("https://it-studio-assig-backend.onrender.com/api/user/allusers");
+      const response = await fetch(
+        "https://it-studio-assig-backend.onrender.com/api/user/allusers"
+      );
       const data = await response.json();
       setTableData(data.users);
     } catch (error) {
@@ -78,9 +87,14 @@ const ExamplePage = () => {
     // Set selected user ID and show the modal
     const row = tableData.find((data) => data._id === userId);
     setShowModal(true);
-    setUpdatedUserData({ name: row.name, phone: row.phone, email: row.email, hobbies: row.hobbies });
+    setUpdatedUserData({
+      name: row.name,
+      phone: row.phone,
+      email: row.email,
+      hobbies: row.hobbies,
+    });
     setSelectedUserId(userId);
-    console.log(selectedUserId)
+    console.log(selectedUserId);
   };
 
   const handleCloseModal = () => {
@@ -90,13 +104,16 @@ const ExamplePage = () => {
   const handleSaveChanges = () => {
     // Send PUT request to update the user
     // console.log(selectedUserId);
-    fetch(`https://it-studio-assig-backend.onrender.com/api/user/updateuser/${selectedUserId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedUserData),
-    })
+    fetch(
+      `https://it-studio-assig-backend.onrender.com/api/user/updateuser/${selectedUserId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedUserData),
+      }
+    )
       .then((response) => {
         if (response.ok) {
           // Update the corresponding user in the tableData state
@@ -118,9 +135,12 @@ const ExamplePage = () => {
   // Delete Function
   const handleDeleteClick = (userId) => {
     // Send DELETE request to delete the user
-    fetch(`https://it-studio-assig-backend.onrender.com/api/user/deleteuser/${userId}`, {
-      method: "DELETE",
-    })
+    fetch(
+      `https://it-studio-assig-backend.onrender.com/api/user/deleteuser/${userId}`,
+      {
+        method: "DELETE",
+      }
+    )
       .then((response) => {
         if (response.ok) {
           // Remove the deleted user from the tableData state
@@ -166,8 +186,7 @@ const ExamplePage = () => {
         setSelectedRows([]);
         setEmailAddress("");
         // console.log("Buttion")
-        setShow(false)
-        window.location.reload();
+        setShow(false);
       })
       .catch((error) => {
         console.log(emailAddress);
@@ -178,51 +197,63 @@ const ExamplePage = () => {
   return (
     <div>
       <h1>Home Page</h1>
-      <Form onSubmit={handleFormSubmit}>
-        <Form.Group controlId="formName">
-          <Form.Label>Name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter Name"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-          />
-        </Form.Group>
-        <Form.Group controlId="formPhone">
-          <Form.Label>Phone Number</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter Phone Number"
-            name="phone"
-            value={formData.phone}
-            onChange={handleInputChange}
-          />
-        </Form.Group>
-        <Form.Group controlId="formEmail">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter Email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-          />
-        </Form.Group>
-        <Form.Group controlId="formHobbies">
-          <Form.Label>Hobbies</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter Hobbies"
-            name="hobbies"
-            value={formData.hobbies}
-            onChange={handleInputChange}
-          />
-        </Form.Group>
-        <Button variant="primary my-3" type="submit">
-          Save
-        </Button>
-      </Form>
+      <Button
+        className="btn btn-danger my-3"
+        onClick={() => {
+          setShowAdd(!showAdd);
+        }}
+      >
+        Add User
+      </Button>
+      {showAdd ? (
+        <Form onSubmit={handleFormSubmit}>
+          <Form.Group controlId="formName">
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter Name"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+            />
+          </Form.Group>
+          <Form.Group controlId="formPhone">
+            <Form.Label>Phone Number</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter Phone Number"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+            />
+          </Form.Group>
+          <Form.Group controlId="formEmail">
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="Enter Email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
+          </Form.Group>
+          <Form.Group controlId="formHobbies">
+            <Form.Label>Hobbies</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter Hobbies"
+              name="hobbies"
+              value={formData.hobbies}
+              onChange={handleInputChange}
+            />
+          </Form.Group>
+          <Button variant="primary my-3" type="submit">
+            Save
+          </Button>
+        </Form>
+      ) : (
+        <></>
+      )}
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -236,7 +267,7 @@ const ExamplePage = () => {
           </tr>
         </thead>
         <tbody>
-          {tableData.map((data,index) => (
+          {tableData.map((data, index) => (
             <tr key={data._id}>
               <td>
                 <Form.Check
@@ -244,8 +275,8 @@ const ExamplePage = () => {
                   name="select"
                   onChange={(e) => handleCheckboxChange(e, data._id)}
                 />
-              </td> 
-              <td>{index+1}</td>
+              </td>
+              <td>{index + 1}</td>
               <td>{data.name}</td>
               <td>{data.phone}</td>
               <td>{data.email}</td>
@@ -353,7 +384,7 @@ const ExamplePage = () => {
           value={emailAddress}
           onChange={(e) => setEmailAddress(e.target.value)}
         />
-        {show?(<h6>Wait!!!</h6>):(<></>)}
+        {show ? <h6>Wait!!!</h6> : <></>}
       </Form.Group>
       <Button className="my-3" variant="primary" onClick={handleSendEmail}>
         Send Email
