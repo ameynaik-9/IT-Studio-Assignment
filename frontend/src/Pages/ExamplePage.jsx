@@ -30,6 +30,9 @@ const ExamplePage = () => {
       email: formData.email,
       hobbies: formData.hobbies,
     };
+    if(formData.name===""||formData.email===""||formData.phone===""||formData.hobbies===""){
+      return alert("No Fields could be left blank")
+    }
     setTableData([...tableData, newEntry]);
     setFormData({ name: "", phone: "", email: "", hobbies: "" });
 
