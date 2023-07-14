@@ -109,7 +109,7 @@ router.get("/getuser/:id", async (req, res) => {
 });
 
 router.post("/sendemail", async (req, res) => {
-  console.log("Route")
+  console.log("Route");
   // Configure Nodemailer
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -123,11 +123,21 @@ router.post("/sendemail", async (req, res) => {
     const { rows, email } = req.body;
     // Compose the email content with the checked rows
     const emailContent = `
-      <h1>Checked Rows:</h1>
-      <ul>
-        ${rows.map((row) => `<li>${row.name}</li>`).join("")}
-      </ul>
-    `;
+  <h1>Checked Rows:</h1>
+  <ul>
+    ${rows
+      .map(
+        (row) => `
+          <li>
+            Name: ${row.name}<br>
+            Email: ${row.email}<br>
+            Phone: ${row.phone}<br>
+            Hobbies: ${row.hobbies}
+          </li>`
+      )
+      .join("")}
+  </ul>
+`;
 
     // Define email options
     const mailOptions = {

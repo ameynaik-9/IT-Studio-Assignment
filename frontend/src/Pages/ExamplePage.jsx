@@ -34,7 +34,7 @@ const ExamplePage = () => {
     setFormData({ name: "", phone: "", email: "", hobbies: "" });
 
     // Send form data via POST request to another API
-    fetch("http://localhost:5000/api/user/createuser", {
+    fetch("https://it-studio-assig-backend.onrender.com/api/user/createuser", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -58,7 +58,7 @@ const ExamplePage = () => {
 
   const fetchAllUsers = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/user/allusers");
+      const response = await fetch("https://it-studio-assig-backend.onrender.com/api/user/allusers");
       const data = await response.json();
       setTableData(data.users);
     } catch (error) {
@@ -87,7 +87,7 @@ const ExamplePage = () => {
   const handleSaveChanges = () => {
     // Send PUT request to update the user
     // console.log(selectedUserId);
-    fetch(`http://localhost:5000/api/user/updateuser/${selectedUserId}`, {
+    fetch(`https://it-studio-assig-backend.onrender.com/api/user/updateuser/${selectedUserId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -115,7 +115,7 @@ const ExamplePage = () => {
   // Delete Function
   const handleDeleteClick = (userId) => {
     // Send DELETE request to delete the user
-    fetch(`http://localhost:5000/api/user/deleteuser/${userId}`, {
+    fetch(`https://it-studio-assig-backend.onrender.com/api/user/deleteuser/${userId}`, {
       method: "DELETE",
     })
       .then((response) => {
@@ -154,7 +154,7 @@ const ExamplePage = () => {
       return;
     }
     axios
-      .post("http://localhost:5000/api/user/sendemail", {
+      .post("https://it-studio-assig-backend.onrender.com/api/user/sendemail", {
         rows: selectedRows,
         email: emailAddress,
       })
@@ -240,7 +240,7 @@ const ExamplePage = () => {
                   name="select"
                   onChange={(e) => handleCheckboxChange(e, data._id)}
                 />
-              </td>
+              </td> 
               {/* <td>{data._id}</td> */}
               <td>{data.name}</td>
               <td>{data.phone}</td>
